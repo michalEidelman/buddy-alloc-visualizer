@@ -2,31 +2,26 @@
 
 CXX = g++
 CXXFLAGS = -Wno-unused-result -std=c++17 -Iinclude
+BUILD_DIR = build
+TEST_DIR = tests
 
-TEST1_BIN = test1
-TEST2_BIN = test2
-TEST3_BIN = test3
-TEST4_BIN = test4
-SIM_BIN = simulator
-BENCH_BIN = benchmark
+TEST1_BIN = $(BUILD_DIR)/test1
+TEST2_BIN = $(BUILD_DIR)/test2
+TEST3_BIN = $(BUILD_DIR)/test3
+TEST4_BIN = $(BUILD_DIR)/test4
+SIM_BIN = $(BUILD_DIR)/simulator
+BENCH_BIN = $(BUILD_DIR)/build/benchmark
 
-MALLOC1_SRC = malloc_1.cpp
-MALLOC2_SRC = malloc_2.cpp
-MALLOC3_SRC = malloc_3.cpp
-MALLOC4_SRC = malloc_4.cpp
-BUDDY_SRC = src/BuddyAllocator.cpp
-SUBMITTERS = submitters.txt
+BUDDY_SRC = src/buddy_allocator.cpp
 
-TEST1_SRC = test_malloc_1.cpp
-TEST2_SRC = test_malloc_2.cpp
-TEST3_SRC = test_malloc_3.cpp
-TEST4_SRC = test_malloc_4.cpp
+TEST1_SRC = $(TEST_DIR)/buddy_api_test_1.cpp
+TEST2_SRC = $(TEST_DIR)/buddy_api_test_2.cpp
+TEST3_SRC = $(TEST_DIR)/buddy_api_test_3.cpp
+TEST4_SRC = $(TEST_DIR)/buddy_api_test_4.cpp
 
 HEADER = os_malloc.h
 
-.PHONY: all clean check-os submit help test1 test2 test3 test4 simulator benchmark
-
-all: test1 test2 test3
+.PHONY: all-tests clean check-os help simulator benchmark
 
 help:
 	@echo "========================================="
@@ -34,14 +29,9 @@ help:
 	@echo "========================================="
 	@echo ""
 	@echo "Available targets:"
-	@echo "  make test1      - Test malloc_1 implementation"
-	@echo "  make test2      - Test malloc_2 implementation"
-	@echo "  make test3      - Test malloc_3 implementation"
-	@echo "  make test4      - Test malloc_4 implementation (optional)"
 	@echo "  make simulator  - Build interactive simulator"
 	@echo "  make benchmark  - Build benchmark binary"
-	@echo "  make all        - Run tests 1, 2, and 3"
-	@echo "  make submit     - Create submission zip file"
+	@echo "  make all-tests  - Build and run all tests"
 	@echo "  make clean      - Remove compiled binaries and zip files"
 	@echo "  make check-os   - Check OS compatibility"
 	@echo ""
@@ -52,79 +42,63 @@ check-os:
 		if [ "$$VERSION_ID" = "18.04" ]; then \
 			echo "✓ Ubuntu 18.04"; \
 		else \
-			echo "⚠ Not Ubuntu 18.04 (grading uses Ubuntu 18.04)"; \
+			echo "⚠ Not Ubuntu 18.04"; \
 		fi \
 	else \
-		echo "⚠ Cannot detect OS (grading uses Ubuntu 18.04)"; \
+		echo "⚠ Cannot detect OS"; \
 	fi
 
+all-tests:
+	test1 test2 test3 test4
+
 test1: check-os
-	@if [ ! -f $(MALLOC1_SRC) ]; then \
-		echo "ERROR: $(MALLOC1_SRC) not found!"; \
+	@if [ ! -f $(BUDDY_SRC) ]; then \
+		echo "ERROR: $(BUDDY_SRC) not found!"; \
 		exit 1; \
 	fi
-	@echo "Compiling $(MALLOC1_SRC)..."
-	$(CXX) $(MALLOC1_SRC) $(TEST1_SRC) $(CXXFLAGS) -o $(TEST1_BIN)
-	@echo "Running malloc_1 tests..."
+	@echo "Compiling $(BUDDY_SRC)..."
+	$(CXX) $(BUDDY_SRC) $(TEST1_SRC) $(CXXFLAGS) -o $(TEST1_BIN)
+	@echo "Running test_1..."
 	@./$(TEST1_BIN)
 
 test2: check-os
-	@if [ ! -f $(MALLOC2_SRC) ]; then \
-		echo "ERROR: $(MALLOC2_SRC) not found!"; \
+	@if [ ! -f $(BUDDY_SRC) ]; then \
+		echo "ERROR: $(BUDDY_SRC) not found!"; \
 		exit 1; \
 	fi
-	@echo "Compiling $(MALLOC2_SRC)..."
-	$(CXX) $(MALLOC2_SRC) $(TEST2_SRC) $(CXXFLAGS) -o $(TEST2_BIN)
-	@echo "Running malloc_2 tests..."
+	@echo "Compiling $(BUDDY_SRC)..."
+	$(CXX) $(BUDDY_SRC) $(TEST2_SRC) $(CXXFLAGS) -o $(TEST2_BIN)
+	@echo "Running test_2..."
 	@./$(TEST2_BIN)
 
 test3: check-os
-	@if [ ! -f $(MALLOC3_SRC) ]; then \
-		echo "ERROR: $(MALLOC3_SRC) not found!"; \
+	@if [ ! -f $(BUDDY_SRC) ]; then \
+		echo "ERROR: $(BUDDY_SRC) not found!"; \
 		exit 1; \
 	fi
-	@echo "Compiling malloc_3 + BuddyAllocator library..."
-	$(CXX) $(MALLOC3_SRC) $(BUDDY_SRC) $(TEST3_SRC) $(CXXFLAGS) -o $(TEST3_BIN)
-	@echo "Running malloc_3 tests..."
+	@echo "Compiling $(BUDDY_SRC)"
+	$(CXX) $(BUDDY_SRC) $(TEST3_SRC) $(CXXFLAGS) -o $(TEST3_BIN)
+	@echo "Running test_3..."
 	@./$(TEST3_BIN)
 
 test4: check-os
-	@if [ ! -f $(MALLOC4_SRC) ]; then \
-		echo "NOTE: $(MALLOC4_SRC) not found (this is optional)."; \
-		exit 0; \
+	@if [ ! -f $(BUDDY_SRC) ]; then \
+		echo "ERROR: $(BUDDY_SRC) not found!"; \
+		exit 1; \
 	fi
-	@echo "Compiling $(MALLOC4_SRC)..."
-	$(CXX) $(MALLOC4_SRC) $(TEST4_SRC) $(CXXFLAGS) -o $(TEST4_BIN)
-	@echo "Running malloc_4 tests..."
+	@echo "Compiling $(BUDDY_SRC)..."
+	$(CXX) $(BUDDY_SRC) $(TEST4_SRC) $(CXXFLAGS) -o $(TEST4_BIN)
+	@echo "Running test_4 tests..."
 	@./$(TEST4_BIN)
 
 simulator:
 	$(CXX) tools/simulator.cpp $(BUDDY_SRC) $(CXXFLAGS) -o $(SIM_BIN)
 
 benchmark:
-	$(CXX) benchmark.cpp $(BUDDY_SRC) $(CXXFLAGS) -O2 -o $(BENCH_BIN)
-
-submit:
-	@echo "========================================="
-	@echo "Creating Submission Package"
-	@echo "========================================="
-	@if [ ! -f $(SUBMITTERS) ]; then \
-		echo "ERROR: $(SUBMITTERS) not found!"; \
-		exit 1; \
-	fi
-	@ID1=$$(sed -n '1p' $(SUBMITTERS) | awk '{print $$NF}' | tr -d ' \t\r\n'); \
-	ID2=$$(sed -n '2p' $(SUBMITTERS) | awk '{print $$NF}' | tr -d ' \t\r\n'); \
-	if [ -z "$$ID1" ] || [ -z "$$ID2" ]; then \
-		echo "ERROR: $(SUBMITTERS) must contain exactly 2 student IDs!"; \
-		exit 1; \
-	fi; \
-	ZIPNAME="$$ID1-$$ID2.zip"; \
-	FILES_TO_ZIP="$(SUBMITTERS) $(MALLOC1_SRC) $(MALLOC2_SRC) $(MALLOC3_SRC) $(MALLOC4_SRC) os_malloc.h include/BuddyAllocator.hpp src/BuddyAllocator.cpp README.md"; \
-	zip -q $$ZIPNAME $$FILES_TO_ZIP; \
-	echo "✓ Submission created: $$ZIPNAME"
+	$(CXX) benchmarks/benchmark.cpp $(BUDDY_SRC) $(CXXFLAGS) -O2 -o $(BENCH_BIN)
 
 clean:
 	@echo "Cleaning up..."
-	rm -f $(TEST1_BIN) $(TEST2_BIN) $(TEST3_BIN) $(TEST4_BIN) $(SIM_BIN) $(BENCH_BIN)
+	rm -rf $(BUILD_DIR)
 	rm -f *.zip
 	@echo "Done."
