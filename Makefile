@@ -10,7 +10,7 @@ TEST2_BIN = $(BUILD_DIR)/test2
 TEST3_BIN = $(BUILD_DIR)/test3
 TEST4_BIN = $(BUILD_DIR)/test4
 SIM_BIN = $(BUILD_DIR)/simulator
-BENCH_BIN = $(BUILD_DIR)/build/benchmark
+BENCH_BIN = $(BUILD_DIR)/benchmark
 
 BUDDY_SRC = src/buddy_allocator.cpp
 
