@@ -1,0 +1,33 @@
+# Build outputs
+build/
+cmake-build-*/
+*.o
+*.obj
+*.a
+*.so
+*.dylib
+*.out
+
+# Project executables
+benchmark
+simulator
+test1
+test2
+test3
+test4
+
+# Submission archives
+*.zip
+
+# Coverage and diagnostics
+coverage/
+*.gcda
+*.gcno
+*.gcov
+*.log
+
+# IDE and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
