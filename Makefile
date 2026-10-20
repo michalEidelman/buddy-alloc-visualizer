@@ -40,12 +40,12 @@ check-os:
 	@if [ -f /etc/os-release ]; then \
 		. /etc/os-release; \
 		if [ "$$VERSION_ID" = "18.04" ]; then \
-			echo "✓ Ubuntu 18.04"; \
+			echo "Ubuntu 18.04"; \
 		else \
-			echo "⚠ Not Ubuntu 18.04"; \
+			echo "Not Ubuntu 18.04"; \
 		fi \
 	else \
-		echo "⚠ Cannot detect OS"; \
+		echo "Cannot detect OS"; \
 	fi
 
 all-tests:
@@ -56,6 +56,7 @@ test1: check-os
 		echo "ERROR: $(BUDDY_SRC) not found!"; \
 		exit 1; \
 	fi
+	@mkdir -p $(BUILD_DIR)
 	@echo "Compiling $(BUDDY_SRC)..."
 	$(CXX) $(BUDDY_SRC) $(TEST1_SRC) $(CXXFLAGS) -o $(TEST1_BIN)
 	@echo "Running test_1..."
@@ -66,6 +67,7 @@ test2: check-os
 		echo "ERROR: $(BUDDY_SRC) not found!"; \
 		exit 1; \
 	fi
+	@mkdir -p $(BUILD_DIR)
 	@echo "Compiling $(BUDDY_SRC)..."
 	$(CXX) $(BUDDY_SRC) $(TEST2_SRC) $(CXXFLAGS) -o $(TEST2_BIN)
 	@echo "Running test_2..."
@@ -76,6 +78,7 @@ test3: check-os
 		echo "ERROR: $(BUDDY_SRC) not found!"; \
 		exit 1; \
 	fi
+	@mkdir -p $(BUILD_DIR)
 	@echo "Compiling $(BUDDY_SRC)"
 	$(CXX) $(BUDDY_SRC) $(TEST3_SRC) $(CXXFLAGS) -o $(TEST3_BIN)
 	@echo "Running test_3..."
@@ -86,15 +89,18 @@ test4: check-os
 		echo "ERROR: $(BUDDY_SRC) not found!"; \
 		exit 1; \
 	fi
+	@mkdir -p $(BUILD_DIR)
 	@echo "Compiling $(BUDDY_SRC)..."
 	$(CXX) $(BUDDY_SRC) $(TEST4_SRC) $(CXXFLAGS) -o $(TEST4_BIN)
 	@echo "Running test_4 tests..."
 	@./$(TEST4_BIN)
 
 simulator:
+	@mkdir -p $(BUILD_DIR)
 	$(CXX) tools/simulator.cpp $(BUDDY_SRC) $(CXXFLAGS) -o $(SIM_BIN)
 
 benchmark:
+	@mkdir -p $(BUILD_DIR)
 	$(CXX) benchmarks/benchmark.cpp $(BUDDY_SRC) $(CXXFLAGS) -O2 -o $(BENCH_BIN)
 
 clean:
