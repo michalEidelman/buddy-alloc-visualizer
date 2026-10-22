@@ -1,6 +1,6 @@
 # Buddy Allocator Visualizer
 
-An educational + engineering-grade C++ project that implements a **Buddy Memory Allocator** and exposes:
+An educational + engineering-grade C++ project that implements a **Buddy Memory Allocator** and creates:
 
 - a thread-safe allocator library,
 - JSON heap snapshots,
@@ -76,7 +76,6 @@ free_lists[10] -> 128KB blocks
 ```
 include/BuddyAllocator.hpp   # public allocator API
 src/BuddyAllocator.cpp       # implementation
-malloc_3.cpp                 # compatibility wrappers (smalloc/sfree/...)
 tools/simulator.cpp          # interactive educational CLI
 benchmark.cpp                # throughput + efficiency benchmark
 ```
@@ -86,7 +85,6 @@ benchmark.cpp                # throughput + efficiency benchmark
 ## Build
 
 ```bash
-make test3
 make simulator
 make benchmark
 ```
@@ -94,7 +92,6 @@ make benchmark
 Run:
 
 ```bash
-./test3
 ./simulator
 ./benchmark
 ```
@@ -134,4 +131,3 @@ This JSON is designed for educational dashboards or local web visualizers.
 ## Notes
 
 - Thread-safety is implemented with `std::mutex` and `std::lock_guard`.
-- Legacy homework API (`smalloc`, `scalloc`, `sfree`, `srealloc`, stats helpers) is preserved.
