@@ -21,7 +21,7 @@ TEST4_SRC = $(TEST_DIR)/buddy_api_test_4.cpp
 
 HEADER = os_malloc.h
 
-.PHONY: all-tests clean check-os help simulator benchmark
+.PHONY: all-tests clean check-os help simulator benchmark run
 
 help:
 	@echo "========================================="
@@ -29,6 +29,7 @@ help:
 	@echo "========================================="
 	@echo ""
 	@echo "Available targets:"
+	@echo "  make run  		 - Build and run interactive simulator"
 	@echo "  make simulator  - Build interactive simulator"
 	@echo "  make benchmark  - Build benchmark binary"
 	@echo "  make all-tests  - Build and run all tests"
@@ -95,6 +96,9 @@ test4: check-os
 	@echo "Running test_4 tests..."
 	@./$(TEST4_BIN)
 
+run: simulator
+	@./build/simulator
+
 simulator:
 	@mkdir -p $(BUILD_DIR)
 	$(CXX) tools/simulator.cpp $(BUDDY_SRC) $(CXXFLAGS) -o $(SIM_BIN)
@@ -107,4 +111,5 @@ clean:
 	@echo "Cleaning up..."
 	rm -rf $(BUILD_DIR)
 	rm -f *.zip
+	rm -f *json
 	@echo "Done."

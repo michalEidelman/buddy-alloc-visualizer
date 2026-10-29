@@ -29,5 +29,6 @@ coverage/
 # IDE and operating-system files
 .vscode/
 .idea/
+.venv/
 .DS_Store
 Thumbs.db

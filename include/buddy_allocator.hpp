@@ -25,7 +25,9 @@ public:
     std::size_t metadataSize() const;
 
     std::string dumpHeapStateJson();
+    std::string createHeapStateHTML();
     std::vector<std::string> consumeLastEvents();
+
 
 private:
     BuddyAllocator();

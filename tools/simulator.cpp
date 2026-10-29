@@ -19,7 +19,7 @@ int main() {
     int next_id = 1;
 
     std::cout << CYAN << "Buddy Allocator Educational Simulator" << RESET << "\n";
-    std::cout << "Commands: alloc <bytes>, free <id>, state, help, quit\n\n";
+    std::cout << "Commands: alloc <bytes>, free <id>, HTML, state, help, quit\n\n";
 
     std::string line;
     while (true) {
@@ -47,7 +47,7 @@ int main() {
             for (const auto& event : events) {
                 std::cout << "  - " << event << "\n";
             }
-            std::cout << allocator.dumpHeapStateJson() << "\n";
+            // std::cout << allocator.dumpHeapStateJson() << "\n";
         } else if (cmd == "free") {
             int id = 0;
             in >> id;
@@ -63,14 +63,20 @@ int main() {
             for (const auto& event : events) {
                 std::cout << "  - " << event << "\n";
             }
-            std::cout << allocator.dumpHeapStateJson() << "\n";
+            // std::cout << allocator.dumpHeapStateJson() << "\n";
         } else if (cmd == "state") {
             std::cout << allocator.dumpHeapStateJson() << "\n";
-        } else if (cmd == "help") {
+        } else if (cmd == "help")
+        {
             std::cout << "alloc <bytes>: allocate memory\n"
                       << "free <id>: free a prior allocation\n"
+                      << "HTML: creates a visualizer via HTML\n"
                       << "state: dump heap state JSON\n"
                       << "quit: exit\n";
+        } else if (cmd == "HTML")
+        {
+            std::cout << allocator.createHeapStateHTML() << "\n";
+
         } else if (cmd == "quit" || cmd == "exit") {
             break;
         } else if (!cmd.empty()) {
